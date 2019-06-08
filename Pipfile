@@ -4,6 +4,9 @@ url = "https://mirrors.ustc.edu.cn/pypi/web/simple/"
 verify_ssl = true
 
 [dev-packages]
+pylint = "*"
+ipython = "*"
+autopep8 = "*"
 
 [packages]
 jieba = "*"
