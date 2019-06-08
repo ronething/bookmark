@@ -1,10 +1,21 @@
-# chrome bookmark 整理分析
+# chrome bookmark 整理统计生成词云
 
-## 0x00
+## 0x00 Introduction
 
-首先读取 bookmark 不同操作系统的 bookmark 在不同的路径
+首先读取 bookmark 不同操作系统的 bookmark 在不同的路径，可浏览这一段[代码](https://github.com/bdesham/chrome-export/blob/927e0ec273798294d4f06b323794a0ee5b2967eb/export-chrome-bookmarks#L99)
+
+```python
+if system() == "Darwin":
+    input_filename = expanduser("~/Library/Application Support/Google/Chrome/Default/History")
+elif system() == "Linux":
+    input_filename = expanduser("~/.config/google-chrome/Default/History")
+elif system() == "Windows":
+    input_filename = environ["LOCALAPPDATA"] + r"\Google\Chrome\User Data\Default\History"
+```
 
 ## 0x01
+
+- bookmark 结构分析
 
 ```sh
 In [35]: contents.keys()                                                      
@@ -50,3 +61,50 @@ type
 url
 ```
 
+明白了原理就 OK 了，具体看 `code/bookmark.py`
+
+## 0x01
+
+- jieba 分词
+
+没啥好说的，我也不会，根据官方样例照着写就行。
+
+## 0x02
+
+- wordcloud 生成词云图
+
+`from wordcloud import WordCloud`
+
+点进去看这个类的一些配置即可，也可以使用搜索引擎查看一些别人写的例子。
+
+```python
+bookmark_cloud = WordCloud(font_path=fontpath,
+                            background_color="white",
+                            max_words=None,
+                            max_font_size=248,
+                            random_state=42,
+                            width=2560, height=1600
+                            )
+bookmark_cloud.generate_from_frequencies(contents) # 需要注意的是 这里传入的 contents 是一个字典 dict
+```
+
+## 0x03 Development
+
+```sh
+git clone [repo] && cd [repo]
+# 将 Bookmarks 书签文件放置于项目根目录
+pipenv install # 如果你还没有安装 pipenv 通过 pip(3) install pipenv 解决
+pipenv run python code/summary.py
+```
+
+## 0x04
+
+![最终效果](./bookmark.png)
+
+## 0x05
+
+参考资料：
+
+- [chrome-export](https://github.com/bdesham/chrome-export)
+- [jieba](https://github.com/fxsjy/jieba)
+- [wordcloud](https://github.com/amueller/word_cloud)
