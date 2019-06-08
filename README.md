@@ -1,6 +1,8 @@
 # chrome bookmark 整理统计生成词云
 
-## 0x00 Introduction
+## 0x00
+
+- bookmark 结构分析
 
 首先读取 bookmark 不同操作系统的 bookmark 在不同的路径，可浏览这一段[代码](https://github.com/bdesham/chrome-export/blob/927e0ec273798294d4f06b323794a0ee5b2967eb/export-chrome-bookmarks#L99)
 
@@ -13,9 +15,7 @@ elif system() == "Windows":
     input_filename = environ["LOCALAPPDATA"] + r"\Google\Chrome\User Data\Default\History"
 ```
 
-## 0x01
-
-- bookmark 结构分析
+通过 `json.load()` 或 `json.loads()` 方法读出内容并赋值给 contents
 
 ```sh
 In [35]: contents.keys()                                                      
