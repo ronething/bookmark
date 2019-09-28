@@ -12,6 +12,7 @@ autopep8 = "*"
 jieba = "*"
 wordcloud = "*"
 matplotlib = "*"
+pyecharts = "*"
 
 [requires]
 python_version = "3.6"

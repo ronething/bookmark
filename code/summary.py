@@ -7,10 +7,21 @@ import re
 from collections import Counter
 import matplotlib.pyplot as plt
 from wordcloud import WordCloud
+from os.path import expanduser
+from platform import system
 
 filepath = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-bookmark_path = os.path.join(filepath, 'Bookmarks')
+# bookmark_path = os.path.join(filepath, 'Bookmarks')
+if system() == "Darwin":
+    bookmark_path = expanduser("~/Library/Application Support/Google/Chrome/Default/Bookmarks")
+elif system() == "Linux":
+    bookmark_path = expanduser("~/.config/google-chrome/Default/Bookmarks")
+elif system() == "Windows":
+    bookmark_path = os.environ["LOCALAPPDATA"] + r"\Google\Chrome\User Data\Default\Bookmarks"
+else:
+    print('Your system ("{}") is not recognized. Please specify the input file manually.'.format(system()))
+    exit(1)
 fontpath = os.path.join(filepath, 'font', 'sarasa-ui-sc-regular.ttf')
 
 
@@ -63,7 +74,7 @@ def gen_wordcloud(contents):
 
 
 def filter_dict(data):
-    filter_list = ['CSDN', '博客', '博客园', '百度','使','线']
+    filter_list = ['CSDN', '博客', '博客园', '百度', '使', '线']
     for i in filter_list:
         data.pop(i, None)
 
@@ -86,6 +97,15 @@ def main():
     # 这里我自定义过滤了一下
     filter_dict(jieba_dict)
     gen_wordcloud(jieba_dict)
+
+    # pyecharts wordcloud
+    # from pyecharts.charts import WordCloud
+    # from pyecharts.options.global_options import InitOpts
+    # c = (
+    #     WordCloud(init_opts=InitOpts(width="1800px", height="1000px"))
+    #         .add("", jieba_dict.items())
+    # )
+    # c.render()
 
 
 if __name__ == "__main__":
